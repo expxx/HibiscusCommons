@@ -2,6 +2,7 @@ package me.lojosho.hibiscuscommons.nms;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -11,9 +12,9 @@ import javax.annotation.Nullable;
 
 public interface NMSUtils {
 
-    int getNextEntityId();
+    int getNextEntityId(World world);
 
-    Entity getEntity(int entityId);
+    Entity getEntity(int entityId, World world);
 
     @Nullable
     Color getColor(ItemStack itemStack);

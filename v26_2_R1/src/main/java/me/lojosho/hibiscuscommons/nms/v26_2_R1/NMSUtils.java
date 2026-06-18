@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
-import me.lojosho.hibiscuscommons.HibiscusCommonsPlugin;
 import me.lojosho.hibiscuscommons.util.FoliaScheduler;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -17,14 +16,13 @@ import net.minecraft.network.protocol.game.ClientboundUpdateAdvancementsPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.component.DyedItemColor;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.World;
+import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
@@ -34,31 +32,18 @@ import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Field;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class NMSUtils implements me.lojosho.hibiscuscommons.nms.NMSUtils {
 
     @Override
-    public int getNextEntityId() {
-        return ENTITY_COUNTER.incrementAndGet();
-    }
-
-    private static final AtomicInteger ENTITY_COUNTER;
-    static {
-        try {
-            Field entityCounterField = Entity.class.getDeclaredField("ENTITY_COUNTER");
-            entityCounterField.setAccessible(true);
-            ENTITY_COUNTER = (AtomicInteger) entityCounterField.get(null);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+    public int getNextEntityId(World world) {
+        return ((CraftWorld) world).getHandle().getNextEntityId();
     }
 
     @Override
-    public org.bukkit.entity.Entity getEntity(int entityId) {
-        net.minecraft.world.entity.Entity entity = getNMSEntity(entityId);
+    public org.bukkit.entity.Entity getEntity(int entityId, World world) {
+        net.minecraft.world.entity.Entity entity = getNMSEntity(entityId, ((CraftWorld) world).getHandle());
         if (entity == null) return null;
         return entity.getBukkitEntity();
     }
@@ -90,13 +75,8 @@ public class NMSUtils implements me.lojosho.hibiscuscommons.nms.NMSUtils {
         return CraftItemStack.asBukkitCopy(nmsStack);
     }
 
-    private net.minecraft.world.entity.Entity getNMSEntity(int entityId) {
-        for (ServerLevel world : ((CraftServer) Bukkit.getServer()).getHandle().getServer().getAllLevels()) {
-            net.minecraft.world.entity.Entity entity = world.getEntity(entityId);
-            if (entity == null) continue;
-            return entity;
-        }
-        return null;
+    private net.minecraft.world.entity.Entity getNMSEntity(int entityId, ServerLevel level) {
+        return level.getEntity(entityId);
     }
 
     @Override

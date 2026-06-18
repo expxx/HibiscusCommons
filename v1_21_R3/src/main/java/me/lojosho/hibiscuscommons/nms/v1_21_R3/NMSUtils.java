@@ -19,10 +19,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.component.DyedItemColor;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
@@ -38,12 +35,12 @@ import java.util.*;
 public class NMSUtils implements me.lojosho.hibiscuscommons.nms.NMSUtils {
 
     @Override
-    public int getNextEntityId() {
+    public int getNextEntityId(World world) {
         return net.minecraft.world.entity.Entity.nextEntityId();
     }
 
     @Override
-    public org.bukkit.entity.Entity getEntity(int entityId) {
+    public org.bukkit.entity.Entity getEntity(int entityId, World world) {
         net.minecraft.world.entity.Entity entity = getNMSEntity(entityId);
         if (entity == null) return null;
         return entity.getBukkitEntity();

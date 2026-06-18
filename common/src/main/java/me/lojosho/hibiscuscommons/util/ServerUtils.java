@@ -3,6 +3,7 @@ package me.lojosho.hibiscuscommons.util;
 import me.lojosho.hibiscuscommons.HibiscusCommonsPlugin;
 import me.lojosho.hibiscuscommons.nms.NMSHandlers;
 import org.bukkit.Color;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.profile.PlayerProfile;
@@ -16,8 +17,8 @@ import java.util.List;
 
 public class ServerUtils {
 
-    public static int getNextEntityId() {
-        return NMSHandlers.getHandler().getUtilHandler().getNextEntityId();
+    public static int getNextEntityId(World world) {
+        return NMSHandlers.getHandler().getUtilHandler().getNextEntityId(world);
     }
 
     @Nullable
