@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "me.lojosho"
-version = "0.9.1"
+version = "0.9.2"
 
 allprojects {
     apply(plugin = "java")
@@ -129,6 +129,7 @@ dependencies {
     implementation(project(path = ":v1_21_R6"))
     implementation(project(path = ":v1_21_R7"))
     implementation(project(path = ":v26_1_R1"))
+    implementation(project(path = ":v26_2_R1"))
 }
 
 java {
@@ -167,6 +168,7 @@ tasks {
         dependsOn(":v1_21_R6:build")
         dependsOn(":v1_21_R7:build")
         dependsOn(":v26_1_R1:build")
+        dependsOn(":v26_2_R1:build")
         mergeServiceFiles()
 
         relocate("org.bstats", "me.lojosho.shaded.bstats")
